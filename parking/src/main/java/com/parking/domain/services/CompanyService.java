@@ -12,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 public class CompanyService {
 
   private final CompanyRepository companyRepository;
+  private final AuthService authService;
 
   public void createCompany(Company company) {
+    company.setPassword(authService.passwordToHash(company.getPassword()));
     companyRepository.save(company);
   }
 }
