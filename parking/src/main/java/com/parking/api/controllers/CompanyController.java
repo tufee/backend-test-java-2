@@ -20,7 +20,7 @@ public class CompanyController {
 
   private final CompanyService companyService;
 
-  @PostMapping
+  @PostMapping("/create")
   public ResponseEntity<Void> createCompany(@Valid @RequestBody Company company) {
     companyService.createCompany(company);
     return ResponseEntity.status(HttpStatus.CREATED).build();
