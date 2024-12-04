@@ -1,5 +1,8 @@
 package com.parking.domain.entities;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,8 +35,17 @@ public class Company {
   private String phone;
 
   @Column(nullable = false)
-  private String motorcycleParkingSpace;
+  private Integer motorcycleParkingSpace;
 
   @Column(nullable = false)
-  private String carParkingSpace;
+  private Integer carParkingSpace;
+
+  @Column(nullable = false)
+  private String password;
+
+  @Column(nullable = false, name = "created_at", updatable = false)
+  private final OffsetDateTime createdAt = OffsetDateTime.now(ZoneOffset.UTC);
+
+  @Column(nullable = true, name = "updated_at")
+  private OffsetDateTime updatedAt;
 }
