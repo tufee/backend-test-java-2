@@ -10,11 +10,11 @@ import lombok.RequiredArgsConstructor;
 public class AuthService {
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  String passwordToHash(String password) {
+  public String passwordToHash(String password) {
     return this.bCryptPasswordEncoder.encode(password);
   }
 
-  Boolean compareHash(String password, String hash) {
+  public Boolean compareHash(String password, String hash) {
     Boolean isCorrectPassword = this.bCryptPasswordEncoder.matches(password, hash);
     return isCorrectPassword ? true : false;
   }
