@@ -61,18 +61,18 @@ public class CompanyServiceTest {
     verify(companyRepository).save(captor.capture());
     Company capturedCompany = captor.getValue();
 
-    assertEquals(capturedCompany.getId(), 1);
-    assertEquals(capturedCompany.getCnpj(), "63478706000183");
-    assertEquals(capturedCompany.getName(), "park ltda");
-    assertEquals(capturedCompany.getAddress(), "Rua x");
-    assertEquals(capturedCompany.getPhone(), "11988887777");
-    assertEquals(capturedCompany.getMotorcycleParkingSpace(), 10);
-    assertEquals(capturedCompany.getCarParkingSpace(), 10);
-    assertEquals(capturedCompany.getPassword(), "hashedPassword");
+    assertEquals(1, capturedCompany.getId());
+    assertEquals("63478706000183", capturedCompany.getCnpj());
+    assertEquals("park ltda", capturedCompany.getName());
+    assertEquals("Rua x", capturedCompany.getAddress());
+    assertEquals("11988887777", capturedCompany.getPhone());
+    assertEquals(10, capturedCompany.getMotorcycleParkingSpace());
+    assertEquals(10, capturedCompany.getCarParkingSpace());
+    assertEquals("hashedPassword", capturedCompany.getPassword());
   }
 
   @Test
-  public void shouldThrowExceptionWhenCnpjAlredyExists() {
+  public void shouldThrowExceptionWhenCnpjAlreadyExists() {
     Company existingCompany = new Company();
     existingCompany.setId((long) 1);
     existingCompany.setCnpj("63478706000183");
