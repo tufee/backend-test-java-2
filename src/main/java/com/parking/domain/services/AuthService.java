@@ -15,7 +15,6 @@ public class AuthService {
   }
 
   public Boolean compareHash(String password, String hash) {
-    Boolean isCorrectPassword = this.bCryptPasswordEncoder.matches(password, hash);
-    return isCorrectPassword ? true : false;
+      return this.bCryptPasswordEncoder.matches(password, hash);
   }
 }
