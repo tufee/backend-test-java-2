@@ -1,30 +1,21 @@
 package com.parking.api.utils;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+
+import javax.crypto.SecretKey;
 import java.util.Date;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-
 public class JwtUtil {
-  private static final String SECRET_KEY = "secret";
-  private static final long ONE_DAY_IN_MILLIS = 86400000;
-  private static final long EXPIRATION_TIME = ONE_DAY_IN_MILLIS;
+    private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor("9fjjZ6HuzwB4QGHFLqKi4vq8RGkAPU2fHdskaHKuwu223hhsaHdh".getBytes());
+    private static final long EXPIRATION_TIME = 86400000; // 1 dia em milissegundos
 
-  public static String generateToken(String cnpj) {
-    return Jwts.builder()
-        .setSubject(cnpj)
-        .setIssuedAt(new Date())
-        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-        .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-        .compact();
-  }
-
-  public static String validateToken(String token) {
-    Claims claims = Jwts.parser()
-        .setSigningKey(SECRET_KEY)
-        .parseClaimsJws(token)
-        .getBody();
-    return claims.getSubject();
-  }
+    public static String generateToken(String cnpj) {
+        return Jwts.builder()
+                .subject(cnpj)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SECRET_KEY)
+                .compact();
+    }
 }
