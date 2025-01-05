@@ -25,13 +25,13 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-//    @GetMapping()
-//    public ResponseEntity<Optional<Company>> findCompany(@Valid @RequestBody String cnpj) {
-//        Optional<Company> company = companyRepository.findByCnpj(cnpj);
-//
-//        if (company.isEmpty()) {
-//            throw new RuntimeException("Company not found");
-//        }
-//        return ResponseEntity.status(HttpStatus.FOUND).body(company);
-//    }
+    @GetMapping()
+    public ResponseEntity<Optional<Company>> findCompany(@Valid @RequestParam String cnpj) {
+        Optional<Company> company = companyRepository.findByCnpj(cnpj);
+
+        if (company.isEmpty()) {
+            throw new RuntimeException("Company not found");
+        }
+        return ResponseEntity.ok(company);
+    }
 }
