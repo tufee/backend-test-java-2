@@ -1,7 +1,5 @@
 package com.parking.api.controllers;
 
-import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,18 +31,18 @@ public class CompanyController {
 
     @GetMapping()
     public ResponseEntity<GetCompanyResponse> findCompany(@Valid @RequestParam String cnpj) {
-        Optional<Company> company = companyService.findCompanyByCnpj(cnpj);
+        Company company = companyService.findCompanyByCnpj(cnpj);
 
         GetCompanyResponse getCompanyResponse = new GetCompanyResponse(
-                company.get().getId(),
-                company.get().getName(),
-                company.get().getCnpj(),
-                company.get().getAddress(),
-                company.get().getPhone(),
-                company.get().getMotorcycleParkingSpace(),
-                company.get().getCarParkingSpace(),
-                company.get().getCreatedAt(),
-                company.get().getUpdatedAt());
+                company.getId(),
+                company.getName(),
+                company.getCnpj(),
+                company.getAddress(),
+                company.getPhone(),
+                company.getMotorcycleParkingSpace(),
+                company.getCarParkingSpace(),
+                company.getCreatedAt(),
+                company.getUpdatedAt());
 
         return ResponseEntity.ok(getCompanyResponse);
     }

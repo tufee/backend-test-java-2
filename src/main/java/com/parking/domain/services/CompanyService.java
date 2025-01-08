@@ -1,10 +1,9 @@
 package com.parking.domain.services;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.parking.api.exceptions.CnpjAlreadyExistsException;
+import com.parking.api.exceptions.CompanyNotFoundException;
 import com.parking.domain.entities.Company;
 import com.parking.domain.repositories.CompanyRepository;
 
@@ -19,20 +18,16 @@ public class CompanyService {
 
     public void createCompany(Company company) {
         if (companyRepository.findByCnpj(company.getCnpj()).isPresent()) {
-            throw new CnpjAlreadyExistsException("Company already exists.");
+            throw new CnpjAlreadyExistsException("Company already exists");
         }
 
         company.setPassword(authService.passwordToHash(company.getPassword()));
         companyRepository.save(company);
     }
 
-    public Optional<Company> findCompanyByCnpj(String cnpj) {
-        Optional<Company> company = companyRepository.findByCnpj(cnpj);
+    public Company findCompanyByCnpj(String cnpj) {
+        return companyRepository.findByCnpj(cnpj)
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found"));
 
-        if (company.isEmpty()) {
-            throw new RuntimeException("Company not found");
-        }
-
-        return company;
     }
 }
