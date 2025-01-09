@@ -33,8 +33,8 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping()
-    public ResponseEntity<CompanyResponse> findCompany(@Valid @RequestParam String cnpj) {
+    @GetMapping("/{cnpj}")
+    public ResponseEntity<CompanyResponse> findCompany(@Valid @PathVariable String cnpj) {
         Company company = companyService.findCompanyByCnpj(cnpj);
 
         CompanyResponse getCompanyResponse = new CompanyResponse(
