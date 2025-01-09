@@ -1,9 +1,11 @@
 package com.parking.parking.domain.services;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -235,6 +237,37 @@ public class CompanyServiceTest {
       assertEquals("Company not found", exception.getMessage());
       verify(companyRepository).findById(companyId);
       verify(companyRepository, never()).save(any());
+    }
+  }
+
+  @Nested
+  public class DeleteCompany {
+    @Test
+    void shouldDeleteCompanySuccessfully() {
+      Long companyId = 1L;
+      Company company = new Company();
+      company.setId(companyId);
+
+      when(companyRepository.findById(companyId)).thenReturn(Optional.of(company));
+      doNothing().when(companyRepository).delete(company);
+
+      assertDoesNotThrow(() -> companyService.deleteCompany(companyId));
+
+      verify(companyRepository).findById(companyId);
+      verify(companyRepository).delete(company);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeletingNonExistentCompany() {
+      Long companyId = 1L;
+      when(companyRepository.findById(companyId)).thenReturn(Optional.empty());
+
+      CompanyNotFoundException exception = assertThrows(CompanyNotFoundException.class,
+          () -> companyService.deleteCompany(companyId));
+
+      assertEquals("Company not found", exception.getMessage());
+      verify(companyRepository).findById(companyId);
+      verify(companyRepository, never()).delete(any());
     }
   }
 }

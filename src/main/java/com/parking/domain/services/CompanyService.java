@@ -59,4 +59,11 @@ public class CompanyService {
 
         return companyRepository.save(company);
     }
+
+    public void deleteCompany(Long id) {
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException("Company not found"));
+
+        companyRepository.delete(company);
+    }
 }
