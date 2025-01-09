@@ -39,11 +39,24 @@ public class CompanyServiceTest {
     MockitoAnnotations.openMocks(this);
   }
 
+  private Company createDefaultCompany() {
+    Company company = new Company();
+    company.setId(1L);
+    company.setCnpj("63478706000183");
+    company.setName("park ltda");
+    company.setAddress("Rua x");
+    company.setPhone("11988887777");
+    company.setMotorcycleParkingSpace(10);
+    company.setCarParkingSpace(10);
+    company.setPassword("12345");
+    return company;
+  }
+
   @Nested
   public class CreateCompany {
     @Test
     public void shouldCreateCompany() {
-      Company company = new Company();
+      Company company = createDefaultCompany();
       company.setId((long) 1);
       company.setCnpj("63478706000183");
       company.setName("park ltda");
@@ -77,15 +90,7 @@ public class CompanyServiceTest {
 
     @Test
     public void shouldThrowExceptionWhenCnpjAlreadyExists() {
-      Company existingCompany = new Company();
-      existingCompany.setId((long) 1);
-      existingCompany.setCnpj("63478706000183");
-      existingCompany.setName("park ltda");
-      existingCompany.setAddress("Rua x");
-      existingCompany.setPhone("11988887777");
-      existingCompany.setMotorcycleParkingSpace(10);
-      existingCompany.setCarParkingSpace(10);
-      existingCompany.setPassword("12345");
+      Company existingCompany = createDefaultCompany();
 
       when(companyRepository.findByCnpj(existingCompany.getCnpj()))
           .thenReturn(Optional.of(existingCompany));
@@ -115,15 +120,7 @@ public class CompanyServiceTest {
     public void shouldFindCompany() {
       var cnpj = "63478706000183";
 
-      Company existingCompany = new Company();
-      existingCompany.setId((long) 1);
-      existingCompany.setCnpj(cnpj);
-      existingCompany.setName("park ltda");
-      existingCompany.setAddress("Rua x");
-      existingCompany.setPhone("11988887777");
-      existingCompany.setMotorcycleParkingSpace(10);
-      existingCompany.setCarParkingSpace(10);
-      existingCompany.setPassword("12345");
+      Company existingCompany = createDefaultCompany();
 
       when(companyRepository.findByCnpj(cnpj))
           .thenReturn(Optional.of(existingCompany));
