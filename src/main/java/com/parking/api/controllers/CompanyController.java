@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.parking.api.responses.GetCompanyResponse;
+import com.parking.api.responses.CompanyResponse;
 import com.parking.api.responses.UpdateCompanyRequest;
 import com.parking.domain.entities.Company;
 import com.parking.domain.services.CompanyService;
@@ -33,10 +33,10 @@ public class CompanyController {
     }
 
     @GetMapping()
-    public ResponseEntity<GetCompanyResponse> findCompany(@Valid @RequestParam String cnpj) {
+    public ResponseEntity<CompanyResponse> findCompany(@Valid @RequestParam String cnpj) {
         Company company = companyService.findCompanyByCnpj(cnpj);
 
-        GetCompanyResponse getCompanyResponse = new GetCompanyResponse(
+        CompanyResponse getCompanyResponse = new CompanyResponse(
                 company.getId(),
                 company.getName(),
                 company.getCnpj(),
@@ -51,13 +51,13 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GetCompanyResponse> updateCompany(
+    public ResponseEntity<CompanyResponse> updateCompany(
             @PathVariable Long id,
             @Valid @RequestBody UpdateCompanyRequest updateCompanyRequest) {
 
         Company updatedCompany = companyService.updateCompany(id, updateCompanyRequest);
 
-        GetCompanyResponse response = new GetCompanyResponse(
+        CompanyResponse response = new CompanyResponse(
                 updatedCompany.getId(),
                 updatedCompany.getName(),
                 updatedCompany.getCnpj(),

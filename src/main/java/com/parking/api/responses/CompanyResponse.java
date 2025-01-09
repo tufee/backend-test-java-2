@@ -2,7 +2,7 @@ package com.parking.api.responses;
 
 import java.time.OffsetDateTime;
 
-public record GetCompanyResponse(
+public record CompanyResponse(
         Long id,
         String name,
         String cnpj,
