@@ -4,12 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -269,5 +273,44 @@ public class CompanyServiceTest {
       verify(companyRepository).findById(companyId);
       verify(companyRepository, never()).delete(any());
     }
+  }
+
+  @Nested
+  public class GetAllCompanies {
+    private Company createCompany(Long id, String name) {
+      Company company = new Company();
+      company.setId(id);
+      company.setName(name);
+      return company;
+    }
+
+    @Test
+    void shouldReturnAllCompanies() {
+      List<Company> companies = Arrays.asList(
+          this.createCompany(1L, "Company A"),
+          createCompany(2L, "Company B"));
+
+      when(companyRepository.findAll()).thenReturn(companies);
+
+      List<Company> result = companyService.getAllCompanies();
+
+      assertNotNull(result);
+      assertEquals(2, result.size());
+      assertEquals("Company A", result.get(0).getName());
+      assertEquals("Company B", result.get(1).getName());
+
+      verify(companyRepository).findAll();
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoCompanies() {
+      when(companyRepository.findAll()).thenReturn(Collections.emptyList());
+
+      List<Company> result = companyService.getAllCompanies();
+
+      assertTrue(result.isEmpty());
+      verify(companyRepository).findAll();
+    }
+
   }
 }

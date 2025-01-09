@@ -2,6 +2,7 @@ package com.parking.domain.services;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -65,5 +66,9 @@ public class CompanyService {
                 .orElseThrow(() -> new CompanyNotFoundException("Company not found"));
 
         companyRepository.delete(company);
+    }
+
+    public List<Company> getAllCompanies() {
+        return companyRepository.findAll();
     }
 }

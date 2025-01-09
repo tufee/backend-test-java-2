@@ -1,5 +1,7 @@
 package com.parking.api.controllers;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,5 +53,14 @@ public class CompanyController {
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
         companyService.deleteCompany(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CompanyResponse>> getAllCompanies() {
+        List<Company> companies = companyService.getAllCompanies();
+        List<CompanyResponse> response = companies.stream()
+                .map(CompanyResponse::fromEntity)
+                .toList();
+        return ResponseEntity.ok(response);
     }
 }
