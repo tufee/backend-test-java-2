@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.parking.api.responses.CompanyResponse;
@@ -36,19 +35,7 @@ public class CompanyController {
     @GetMapping("/{cnpj}")
     public ResponseEntity<CompanyResponse> findCompany(@Valid @PathVariable String cnpj) {
         Company company = companyService.findCompanyByCnpj(cnpj);
-
-        CompanyResponse getCompanyResponse = new CompanyResponse(
-                company.getId(),
-                company.getName(),
-                company.getCnpj(),
-                company.getAddress(),
-                company.getPhone(),
-                company.getMotorcycleParkingSpace(),
-                company.getCarParkingSpace(),
-                company.getCreatedAt(),
-                company.getUpdatedAt());
-
-        return ResponseEntity.ok(getCompanyResponse);
+        return ResponseEntity.ok(CompanyResponse.fromEntity(company));
     }
 
     @PutMapping("/{id}")
@@ -57,19 +44,7 @@ public class CompanyController {
             @Valid @RequestBody UpdateCompanyRequest updateCompanyRequest) {
 
         Company updatedCompany = companyService.updateCompany(id, updateCompanyRequest);
-
-        CompanyResponse response = new CompanyResponse(
-                updatedCompany.getId(),
-                updatedCompany.getName(),
-                updatedCompany.getCnpj(),
-                updatedCompany.getAddress(),
-                updatedCompany.getPhone(),
-                updatedCompany.getMotorcycleParkingSpace(),
-                updatedCompany.getCarParkingSpace(),
-                updatedCompany.getCreatedAt(),
-                updatedCompany.getUpdatedAt());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(CompanyResponse.fromEntity(updatedCompany));
     }
 
     @DeleteMapping("/{id}")
