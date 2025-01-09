@@ -1,6 +1,7 @@
 package com.parking.parking.domain.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -19,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.parking.api.exceptions.CnpjAlreadyExistsException;
 import com.parking.api.exceptions.CompanyNotFoundException;
+import com.parking.api.responses.UpdateCompanyRequest;
 import com.parking.domain.entities.Company;
 import com.parking.domain.repositories.CompanyRepository;
 import com.parking.domain.services.AuthService;
@@ -140,6 +142,99 @@ public class CompanyServiceTest {
           () -> companyService.findCompanyByCnpj(cnpj));
 
       assertEquals("Company not found", exception.getMessage());
+    }
+  }
+
+  @Nested
+  public class UpdateCompany {
+    @Test
+    void shouldUpdateOnlyNonNullFields() {
+      Long companyId = 1L;
+      Company existingCompany = createDefaultCompany();
+
+      UpdateCompanyRequest request = new UpdateCompanyRequest(
+          "new name",
+          null,
+          "",
+          null,
+          25);
+
+      when(companyRepository.findById(companyId)).thenReturn(Optional.of(existingCompany));
+      when(companyRepository.save(any(Company.class))).thenAnswer(i -> i.getArguments()[0]);
+
+      Company updatedCompany = companyService.updateCompany(companyId, request);
+
+      assertEquals("new name", updatedCompany.getName());
+      assertEquals("Rua x", updatedCompany.getAddress());
+      assertEquals("11988887777", updatedCompany.getPhone());
+      assertEquals(10, updatedCompany.getMotorcycleParkingSpace());
+      assertEquals(25, updatedCompany.getCarParkingSpace());
+      assertNotNull(updatedCompany.getUpdatedAt());
+    }
+
+    @Test
+    void shouldNotUpdateWithEmptyStrings() {
+      Long companyId = 1L;
+      Company existingCompany = createDefaultCompany();
+
+      UpdateCompanyRequest request = new UpdateCompanyRequest(
+          "",
+          "   ",
+          null,
+          null,
+          null);
+
+      when(companyRepository.findById(companyId)).thenReturn(Optional.of(existingCompany));
+      when(companyRepository.save(any(Company.class))).thenAnswer(i -> i.getArguments()[0]);
+
+      Company updatedCompany = companyService.updateCompany(companyId, request);
+
+      assertEquals("park ltda", updatedCompany.getName());
+      assertEquals("Rua x", updatedCompany.getAddress());
+      assertEquals("11988887777", updatedCompany.getPhone());
+      assertEquals(10, updatedCompany.getMotorcycleParkingSpace());
+      assertEquals(10, updatedCompany.getCarParkingSpace());
+    }
+
+    @Test
+    void shouldNotUpdateWithNegativeValues() {
+      Long companyId = 1L;
+      Company existingCompany = createDefaultCompany();
+
+      UpdateCompanyRequest request = new UpdateCompanyRequest(
+          null,
+          null,
+          null,
+          -5,
+          -10);
+
+      when(companyRepository.findById(companyId)).thenReturn(Optional.of(existingCompany));
+      when(companyRepository.save(any(Company.class))).thenAnswer(i -> i.getArguments()[0]);
+
+      Company updatedCompany = companyService.updateCompany(companyId, request);
+
+      assertEquals(10, updatedCompany.getMotorcycleParkingSpace());
+      assertEquals(10, updatedCompany.getCarParkingSpace());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenCompanyNotFound() {
+      Long companyId = 1L;
+      UpdateCompanyRequest request = new UpdateCompanyRequest(
+          "new name",
+          "Rua x",
+          "11988887777",
+          15,
+          25);
+
+      when(companyRepository.findById(companyId)).thenReturn(Optional.empty());
+
+      CompanyNotFoundException exception = assertThrows(CompanyNotFoundException.class,
+          () -> companyService.updateCompany(companyId, request));
+
+      assertEquals("Company not found", exception.getMessage());
+      verify(companyRepository).findById(companyId);
+      verify(companyRepository, never()).save(any());
     }
   }
 }
