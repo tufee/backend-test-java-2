@@ -4,6 +4,9 @@ import java.time.OffsetDateTime;
 
 import com.parking.domain.entities.Company;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "company")
 public record CompanyResponse(
                 Long id,
                 String name,

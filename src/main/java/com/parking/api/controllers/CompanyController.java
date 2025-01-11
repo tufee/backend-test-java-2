@@ -3,6 +3,7 @@ package com.parking.api.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,13 +35,13 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/{cnpj}")
+    @GetMapping(value = "/{cnpj}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<CompanyResponse> findCompany(@Valid @PathVariable String cnpj) {
         Company company = companyService.findCompanyByCnpj(cnpj);
         return ResponseEntity.ok(CompanyResponse.fromEntity(company));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<CompanyResponse> updateCompany(
             @PathVariable Long id,
             @Valid @RequestBody UpdateCompanyRequest updateCompanyRequest) {
@@ -55,7 +56,7 @@ public class CompanyController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<List<CompanyResponse>> getAllCompanies() {
         List<Company> companies = companyService.getAllCompanies();
         List<CompanyResponse> response = companies.stream()
