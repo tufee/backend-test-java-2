@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.parking.api.requests.UpdateCompanyRequest;
 import com.parking.api.responses.CompanyResponse;
-import com.parking.api.responses.UpdateCompanyRequest;
 import com.parking.domain.entities.Company;
 import com.parking.domain.services.CompanyService;
 
@@ -29,7 +29,7 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
-    @PostMapping("/create")
+    @PostMapping(value = "/create")
     public ResponseEntity<Void> createCompany(@Valid @RequestBody Company company) {
         companyService.createCompany(company);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -50,7 +50,7 @@ public class CompanyController {
         return ResponseEntity.ok(CompanyResponse.fromEntity(updatedCompany));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
         companyService.deleteCompany(id);
         return ResponseEntity.noContent().build();

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.parking.api.exceptions.CnpjAlreadyExistsException;
 import com.parking.api.exceptions.CompanyNotFoundException;
-import com.parking.api.responses.UpdateCompanyRequest;
+import com.parking.api.requests.UpdateCompanyRequest;
 import com.parking.domain.entities.Company;
 import com.parking.domain.repositories.CompanyRepository;
 
